@@ -3,11 +3,12 @@ name: Auto Create PR
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'feature/**'  # dispara apenas em branches de feature
 
 permissions:
   contents: write
   pull-requests: write
+  workflows: write  # útil caso o PR acione outros workflows
 
 jobs:
   create-pr:
@@ -17,12 +18,18 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Configura GitHub CLI
+        run: gh auth login --with-token <<< "${{ secrets.PAT_TOKEN }}"
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+
       - name: Create Pull Request
         run: |
+          echo "Criando PR da branch ${{ github.ref_name }} para main"
           gh pr create \
             --base "main" \
             --head "${{ github.ref_name }}" \
             --title "Auto PR - ${{ github.ref_name }}" \
-            --body "PR criado automaticamente."
+            --body "PR criado automaticamente pelo workflow."
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
