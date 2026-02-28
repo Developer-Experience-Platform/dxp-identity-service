@@ -1,13 +1,13 @@
 name: Auto Create PR
 
-permissions:
-  contents: write
-  pull-requests: write
-
 on:
   push:
     branches:
       - 'feature/**'
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   create-pr:
@@ -17,9 +17,9 @@ jobs:
       - name: Create Pull Request via API
         run: |
           gh pr create \
-            --base main \
-            --head ${{ github.ref_name }} \
+            --base "main" \
+            --head "${{ github.ref_name }}" \
             --title "Auto PR - ${{ github.ref_name }}" \
-            --body "PR criado automaticamente."
+            --body "PR criado automaticamente da branch ${{ github.ref_name }}."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
