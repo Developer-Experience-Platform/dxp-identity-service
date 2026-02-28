@@ -22,4 +22,6 @@ jobs:
           cache: maven
 
       - name: Build com Maven
-        run: mvn clean verify
+        run: |
+          cd dxp-identity-service 
+          mvn clean install
