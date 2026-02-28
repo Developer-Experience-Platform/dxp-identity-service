@@ -14,12 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create Pull Request via API
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request
         run: |
           gh pr create \
             --base "main" \
             --head "${{ github.ref_name }}" \
             --title "Auto PR - ${{ github.ref_name }}" \
-            --body "PR criado automaticamente da branch ${{ github.ref_name }}."
+            --body "PR criado automaticamente."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
