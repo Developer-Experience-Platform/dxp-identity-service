@@ -3,12 +3,11 @@ name: Auto Create PR
 on:
   push:
     branches:
-      - 'feature/**'  # dispara apenas em branches de feature
+      - 'feature/**'
 
 permissions:
   contents: write
   pull-requests: write
-  workflows: write  # útil caso o PR acione outros workflows
 
 jobs:
   create-pr:
