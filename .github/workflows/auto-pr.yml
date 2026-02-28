@@ -1,5 +1,9 @@
 name: Auto Create PR
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   push:
     branches:
@@ -10,13 +14,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          title: "Auto PR - ${{ github.ref_name }}"
-          body: "PR criado automaticamente a partir da branch feature."
+      - name: Create Pull Request via API
+        run: |
+          gh pr create \
+            --base main \
+            --head ${{ github.ref_name }} \
+            --title "Auto PR - ${{ github.ref_name }}" \
+            --body "PR criado automaticamente."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
