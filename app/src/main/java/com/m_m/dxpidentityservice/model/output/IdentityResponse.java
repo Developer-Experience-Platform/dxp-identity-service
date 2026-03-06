@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record IdentityResponse(
-        UUID usuarioId,
+        UUID idUsuario,
         String nomeUsuario,
         String emailUsuario,
         Boolean ativo,

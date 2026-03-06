@@ -8,6 +8,8 @@ import com.m_m.dxpidentityservice.service.IdentityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Service
 public class IdentityServiceImpl implements IdentityService {
@@ -19,7 +21,14 @@ public class IdentityServiceImpl implements IdentityService {
     @Override
     public IdentityResponse createIdentity(IdentityInput request) {
         var identityEntity = mapper.toEntity(request);
-        identityRepository.save(identityEntity);
-        return mapper.toResponse(request);
+        var saved=  identityRepository.save(identityEntity);
+        return mapper.toResponse(saved);
+    }
+
+    @Override
+    public IdentityResponse getIdentityById(UUID id) {
+        var identityEntity = identityRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Identity not found with id: " + id));
+        return mapper.toResponse(identityEntity);
     }
 }
