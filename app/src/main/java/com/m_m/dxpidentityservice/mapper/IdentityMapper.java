@@ -5,6 +5,7 @@ import com.m_m.dxpidentityservice.model.output.IdentityResponse;
 import com.m_m.dxpidentityservice.persistence.entity.IdentityEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface IdentityMapper {
 
     IdentityResponse toResponse(IdentityEntity request);
 
-    List<IdentityResponse> toResponseList(List<IdentityInput> request);
+    List<IdentityResponse> toResponseList(List<IdentityEntity> request);
+
+    IdentityEntity updateEntityFromInput(IdentityInput request, @MappingTarget IdentityEntity entity);
 }
