@@ -17,9 +17,9 @@ import java.util.UUID;
 public class IdentityEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "id_usuario", length = 36, nullable = false, unique = true)
+    @Column(name = "usuario_id", length = 36, nullable = false, unique = true)
     private UUID idUsuario;
 
     @Column(name = "nome_usuario", length = 255, nullable = false)
@@ -31,10 +31,15 @@ public class IdentityEntity {
     @Column(name = "senha_usuario", length = 255, nullable = false)
     private String senha;
 
-    @Column(name = "ativo_usuario", nullable = false)
+    @Column(name = "ativo_usuario")
     private Boolean ativo;
 
     @Column(name = "data_criacao_usuario", nullable = false)
     private LocalDateTime dataHoraCriacao;
+
+    @PrePersist
+    public void onCreate() {
+        this.dataHoraCriacao = LocalDateTime.now();
+    }
 
 }
