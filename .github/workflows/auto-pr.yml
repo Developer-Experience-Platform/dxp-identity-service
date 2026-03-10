@@ -1,4 +1,4 @@
-name: CI + Auto PR
+name: CI Pipeline + Auto PR
 
 on:
   push:
@@ -16,9 +16,8 @@ permissions:
 
 jobs:
 
-  build:
-    name: Build Project
-    if: github.ref == 'refs/heads/main'
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -32,21 +31,27 @@ jobs:
           java-version: "21"
           cache: maven
 
-      - name: Build with Maven
+      - name: Build project
         run: |
           cd app
-          mvn clean install
+          mvn clean compile
+
+      - name: Run tests
+        run: |
+          cd app
+          mvn test
 
   create-or-update-pr:
     name: Create or Update PR
-    if: startsWith(github.ref, 'refs/heads/feature/')
+    needs: build-and-test
+    if: startsWith(github.ref_name, 'feature/')
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check if PR already exists
+      - name: Check if PR exists
         id: check_pr
         run: |
           PR_NUMBER=$(gh pr list \
@@ -68,7 +73,7 @@ jobs:
             --base main \
             --head "${{ github.ref_name }}" \
             --title "feat: ${{ github.ref_name }}" \
-            --body "Pull Request criado automaticamente pelo workflow."
+            --body "PR criado automaticamente pelo CI."
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
